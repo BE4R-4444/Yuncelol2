@@ -5,21 +5,31 @@
       "src": "server.py",
       "use": "@vercel/python",
       "config": {
-        "flask": true,  
         "runtime": "python3.9",
-        "maxLambdaSize": "15mb"
+        "wsgi": {
+          "app": "app"  
+        },
+        "includeFiles": "templates/**"  
       }
     }
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/templates/$1"  
+    },
+    {
       "src": "/(.*)", 
       "dest": "server.py",
-      "methods": ["GET", "POST", "OPTIONS"]  
+      "methods": ["GET", "POST"]  
     }
   ],
   "build": {
     "env": {
       "PYTHONUNBUFFERED": "1"  
+    },
+    "scripts": {
+      "vercel-build": "cp quiz.db /tmp/quiz.db && pip install -r requirements.txt"
+    }
   }
 }
