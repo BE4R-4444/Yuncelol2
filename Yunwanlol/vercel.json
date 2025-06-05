@@ -6,13 +6,13 @@
       "use": "@vercel/python",
       "config": { 
         "runtime": "python3.9",
-        "flask": true  // 关键！明确告知这是Flask应用
+        "flask": true  
       }
     }
   ],
   "routes": [
     {
-      "src": "/.*",  // 通配所有路径
+      "src": "/.*", 
       "dest": "server.py"
     }
   ]
