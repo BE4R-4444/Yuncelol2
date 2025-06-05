@@ -5,14 +5,20 @@ import sqlite3
 import json
 import os
 
+# 直接从代码中读取配置，不依赖环境变量
 app = Flask(__name__, template_folder='templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
+app.secret_key = "your_predefined_secret_key_here"  # 与vercel.json保持一致
 
 # 静态文件路由
 @app.route('/static/<path:path>')
 def serve_static(path):
     return send_from_directory('templates', path)
 
+# 获取数据库路径（适配Vercel）
+def get_db_path():
+    return '/tmp/quiz.db' if 'VERCEL' in os.environ else 'quiz.db'
+
+# 其余保持原有代码不变...
 # 其余保持原有代码不变...
 
 # 初始化Flask-Limiter
@@ -22,9 +28,6 @@ limiter = Limiter(
     default_limits=["200 per day", "50 per hour"]
 )
 
-# 获取数据库路径（适配Vercel）
-def get_db_path():
-    return '/tmp/quiz.db' if 'VERCEL' in os.environ else 'quiz.db'
 
 # 初始化数据库
 def init_db():
