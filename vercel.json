@@ -7,7 +7,6 @@
       "config": {
         "maxLambdaSize": "15mb",
         "runtime": "python3.9",
-        "installCommand": "bash vercel_build.sh"
       }
     }
   ],
