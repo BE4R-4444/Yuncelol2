@@ -1,15 +1,19 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify, send_from_directory
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask import send_from_directory
 import sqlite3
 import json
-from datetime import datetime
-from random import sample
 import os
 
-app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'
+app = Flask(__name__, template_folder='templates')
+app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
+
+# 静态文件路由
+@app.route('/static/<path:path>')
+def serve_static(path):
+    return send_from_directory('templates', path)
+
+# 其余保持原有代码不变...
 
 # 初始化Flask-Limiter
 limiter = Limiter(
@@ -44,12 +48,7 @@ def get_random_questions():
     return questions
 
 
-@app.route('/static/<path:path>')
-def serve_static(path):
-    return send_from_directory('templates', path)
-@app.route('/')
-def home():
-    return render_template('yunwanlol.html')
+
 
 @app.route('/yunwan')
 def yunwan():
