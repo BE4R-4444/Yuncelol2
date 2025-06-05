@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/app.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.9"
+      }
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [...],
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.9"
+    },
+    "scripts": {
+      "vercel-build": "bash vercel-build.sh && pip install -r api/requirements.txt"
+    }
+  }
+}
