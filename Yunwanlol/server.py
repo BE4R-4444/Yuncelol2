@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask import send_from_directory
 import sqlite3
 import json
 from datetime import datetime
@@ -42,6 +43,10 @@ def get_random_questions():
     conn.close()
     return questions
 
+
+@app.route('/static/<path:path>')
+def serve_static(path):
+    return send_from_directory('templates', path)
 @app.route('/')
 def home():
     return render_template('yunwanlol.html')
