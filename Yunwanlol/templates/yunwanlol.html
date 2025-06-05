@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- 设置文档字符编码为UTF-8，支持中文 -->
+    <meta charset="UTF-8">
+    <!-- 设置视口，使网页在移动设备上正确显示 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 网页标题（显示在浏览器标签页上） -->
+    <title>我的首页</title>
+    <!-- 简单内联样式（实际项目中建议使用外部CSS文件） -->
+    <style>
+    .legal-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #3498db;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      border: none;
+      transition: all 0.3s;
+    }
+    .legal-btn:hover {
+      background-color: #2980b9;
+    }
+
+    /* 声明弹窗样式 */
+    .legal-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      z-index: 1001;
+      border-radius: 8px;
+    }
+    .legal-popup h3 {
+      color: #3498db;
+      margin-top: 0;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+        /* 设置整个页面的基本样式 */
+        body {
+            font-family: Arial, sans-serif;  /* 使用Arial字体 */
+            text-align: center;             /* 所有内容居中 */
+            margin: 0;                      /* 去除默认外边距 */
+            padding: 20px;                  /* 添加20像素内边距 */
+            background-color: #f5f5f5;      /* 浅灰色背景 */
+        }
+
+        /* 主标题样式 */
+        h1 {
+            color: #333;                   /* 深灰色文字 */
+            margin-bottom: 40px;            /* 底部40像素外边距 */
+            font-size: 2.5em;               /* 字体大小2.5倍于默认 */
+        }
+
+        /* 按钮容器样式 */
+        .button-container {
+            display: flex;                  /* 使用flex布局 */
+            flex-direction: column;         /* 垂直排列 */
+            align-items: center;            /* 水平居中 */
+            gap: 20px;                      /* 按钮间距20像素 */
+            max-width: 400px;               /* 最大宽度400像素 */
+            margin: 0 auto;                 /* 水平居中 */
+        }
+
+        /* 按钮基本样式 */
+        .nav-button {
+            padding: 12px 24px;             /* 内边距 */
+            font-size: 1.1em;               /* 字体大小 */
+            background-color: #4CAF50;      /* 绿色背景 */
+            color: white;                   /* 白色文字 */
+            border: none;                   /* 无边框 */
+            border-radius: 5px;             /* 圆角5像素 */
+            cursor: pointer;                /* 鼠标指针变为手形 */
+            text-decoration: none;          /* 去除下划线 */
+            width: 200px;                   /* 固定宽度 */
+            transition: background-color 0.3s; /* 背景色过渡动画 */
+        }
+
+        /* 鼠标悬停时按钮样式 */
+        .nav-button:hover {
+            background-color: #45a049;      /* 深绿色 */
+        }
+
+        /* 为不同按钮设置不同颜色 */
+        #button1 { background-color: #4CAF50; } /* 绿色 */
+        #button2 { background-color: #2196F3; } /* 蓝色 */
+        #button3 { background-color: #ff9800; } /* 橙色 */
+
+        /* 鼠标悬停时不同按钮的颜色变化 */
+        #button1:hover { background-color: #45a049; }
+        #button2:hover { background-color: #0b7dda; }
+        #button3:hover { background-color: #e68a00; }
+    </style>
+</head>
+<body>
+    <!-- 主标题 -->
+    <h1>欢迎来到云检测网站</h1>
+
+    <!-- 按钮容器 -->
+    <div class="button-container">
+        <!-- 第一个按钮 - 跳转到页面1 -->
+        <a href="{{ url_for('yunwan') }}" class="nav-button" id="button1">云玩家检测</a>
+
+        <!-- 第二个按钮 - 跳转到页面2 -->
+        <a href="yunguan.html" class="nav-button" id="button2">云观众检测</a>
+
+        <!-- 第三个按钮 - 跳转到页面3 -->
+        <a href="{{ url_for('ranking') }}" class="nav-button" id="button3">队伍积分排行</a>
+
+        <!-- 声明按钮 -->
+<button class="legal-btn" onclick="showLegal()">免责声明</button>
+
+<!-- 声明内容 -->
+<div class="overlay" id="overlay"></div>
+<div class="legal-popup" id="legalPopup">
+ <div class="legal-notice">
+  <h3 style="color: #3498db; margin-top: 0; display: flex; align-items: center;">
+    <span style="font-size: 1.2em; margin-right: 8px;">📢</span> 免责声明
+  </h3>
+  <div style="border-left: 3px solid #3498db; padding-left: 15px; margin: 10px 0;">
+    <p style="margin: 8px 0; line-height: 1.6;">本站为《英雄联盟》爱好者制作的<b style="color: #e74c3c;">非营利性同人作品</b>，所有内容：</p>
+    <ul style="margin: 10px 0; padding-left: 20px; list-style-type: none;">
+      <li style="margin-bottom: 8px; position: relative; padding-left: 20px;">
+        <span style="position: absolute; left: 0; color: #3498db;">•</span>
+        使用的战队名称/LOGO仅用于<b>粉丝文化传播</b>
+      </li>
+      <li style="margin-bottom: 8px; position: relative; padding-left: 20px;">
+        <span style="position: absolute; left: 0; color: #3498db;">•</span>
+        积分数据为<b>用户的答题积分</b>，与实际赛事无关
+      </li>
+      <li style="position: relative; padding-left: 20px;">
+        <span style="position: absolute; left: 0; color: #3498db;">•</span>
+        本网站<b>不收集</b>任何用户个人隐私信息
+      </li>
+    </ul>
+  </div>
+  <div style="background-color: #f8f9fa; padding: 10px; border-radius: 4px; font-size: 0.9em;">
+    <p style="margin: 0; color: #7f8c8d;">根据《著作权法》第二十四条及《网络安全法》相关规定，本作品属合理使用范畴</p>
+  </div>
+</div>
+
+  <button onclick="hideLegal()" style="
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  ">我已理解</button>
+</div>
+        <script>
+  // 显示声明
+  function showLegal() {
+    document.getElementById('legalPopup').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  }
+   // 隐藏声明
+  function hideLegal() {
+    document.getElementById('legalPopup').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+    }
+        </script>
+
+    </div>
+</body>
+</html>
