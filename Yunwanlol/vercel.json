@@ -6,12 +6,9 @@
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.9"
+        "runtime": "python3.9",
+        "includeFiles": "templates/*"
       }
-    },
-    {
-      "src": "templates/*",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -21,10 +18,15 @@
     },
     {
       "src": "/(.*)",
-      "dest": "server.py"
+      "dest": "server.py",
+      "methods": ["GET", "POST"]
     }
   ],
   "build": {
+    "env": {
+      "SECRET_KEY": "your_predefined_secret_key_here",
+      "FLASK_ENV": "production"
+    },
     "scripts": {
       "vercel-build": "cp quiz.db /tmp/quiz.db && pip install -r requirements.txt"
     }
