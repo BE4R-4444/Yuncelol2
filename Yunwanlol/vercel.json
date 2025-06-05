@@ -2,18 +2,24 @@
   "version": 2,
   "builds": [
     {
-      "src": "*.py",
+      "src": "server.py",
       "use": "@vercel/python",
-      "config": { 
+      "config": {
+        "flask": true,  
         "runtime": "python3.9",
-        "flask": true  
+        "maxLambdaSize": "15mb"
       }
     }
   ],
   "routes": [
     {
-      "src": "/.*", 
-      "dest": "server.py"
+      "src": "/(.*)", 
+      "dest": "server.py",
+      "methods": ["GET", "POST", "OPTIONS"]  
     }
-  ]
+  ],
+  "build": {
+    "env": {
+      "PYTHONUNBUFFERED": "1"  
+  }
 }
