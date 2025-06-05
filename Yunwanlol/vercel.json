@@ -2,33 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "server.py",
+      "src": "*.py",
       "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb",
+      "config": { 
         "runtime": "python3.9",
-        "includeFiles": "templates/*"
+        "flask": true  // 关键！明确告知这是Flask应用
       }
     }
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "/templates/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "server.py",
-      "methods": ["GET", "POST"]
+      "src": "/.*",  // 通配所有路径
+      "dest": "server.py"
     }
-  ],
-  "build": {
-    "env": {
-      "SECRET_KEY": "your_predefined_secret_key_here",
-      "FLASK_ENV": "production"
-    },
-    "scripts": {
-      "vercel-build": "cp quiz.db /tmp/quiz.db && pip install -r requirements.txt"
-    }
-  }
+  ]
 }
